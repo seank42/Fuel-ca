@@ -3,8 +3,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 
-const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
+const RegisterForm = ({ authenticated, onAuthenticated }) => {
+  const errStyle = {
+    color: "red",
+  };
+
   const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
   });
@@ -13,13 +18,15 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
 
   const handleClick = () => {
     axios
-      .post(`http://localhost/api/auth/login`, {
+      .post(`http://localhost/api/auth/register`, {
+        name: form.name,
         email: form.email,
         password: form.password,
       })
       .then((response) => {
         console.log(response.data);
         onAuthenticated(true, response.data.token);
+        // Redirect to the home page or wherever you want
       })
       .catch((err) => {
         console.error(err);
@@ -38,13 +45,23 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
   return (
     <Container className="lg-center d-flex justify-content-center align-items-center">
       <div className="text-center cover-full bg-primary pb-4 pt-4">
-        <h2 className="text-4xl text-white">User Login</h2>
+        <h2 className="text-4xl text-white">User Register</h2>
       </div>
       <div className="flex flex-col items-center space-y-8 mt-12">
         <Form>
-          <Form.Group controlId="formBasicEmail">
+          <Form.Group controlId="formBasicName">
             <Form.Control
               type="text"
+              placeholder="Enter name"
+              name="name"
+              value={form.name}
+              onChange={handleForm}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicEmail">
+            <Form.Control
+              type="email"
               placeholder="Enter email"
               name="email"
               value={form.email}
@@ -69,8 +86,8 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
         </Form>
 
         <div>
-          <Link className="text-blue-500" to="/register">
-            Don't have an account? Register here.
+          <Link className="underline text-blue-500" to="/login">
+            Have an account? Login here.
           </Link>
         </div>
       </div>
@@ -78,4 +95,4 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

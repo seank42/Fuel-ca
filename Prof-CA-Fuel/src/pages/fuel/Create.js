@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Assuming you're using React Router
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
   const navigate = useNavigate();
 
-  // useState to manage form errors and form data
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     fuel_type: "",
@@ -14,15 +13,10 @@ const Create = () => {
     rating: "",
   });
 
-  // this is the function to handle form input changes
   const handleForm = (e) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // this function is to check if required fields exist in the form
   const isRequired = (fields) => {
     let include = true;
     setErrors({});
@@ -30,7 +24,6 @@ const Create = () => {
     fields.forEach((field) => {
       if (!form[field]) {
         include = false;
-        // this sets the error messages for the missing fields
         setErrors((prevState) => ({
           ...prevState,
           [field]: {
@@ -43,16 +36,12 @@ const Create = () => {
     return include;
   };
 
-  // function that handles the form submission
   const submitForm = (e) => {
     e.preventDefault();
 
-    // check if the required fields are present in the form
     if (isRequired(["fuel_type", "price", "rating"])) {
-      // this gets the token from local storage
-      let token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-      // this makes a post request to create a new course
       axios
         .post(`http://localhost/api/fuels`, form, {
           headers: {
@@ -60,13 +49,11 @@ const Create = () => {
           },
         })
         .then((response) => {
-          // this logs the response and navigate to the courses page
           console.log(response);
-          navigate("/fuel");
+          navigate("/home");
         })
         .catch((err) => {
           console.error(err);
-          console.log(err.response.data);
           setErrors(err.response.data.err);
         });
     }
@@ -77,7 +64,7 @@ const Create = () => {
       <Row className="justify-content-center">
         <Col md={8}>
           <h2 className="mb-3 ml-3 text-lg">
-            <b>Create Course</b>
+            <b>Create Fuel</b>
           </h2>
           <Form
             className="flex flex-col items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-zinc-300"

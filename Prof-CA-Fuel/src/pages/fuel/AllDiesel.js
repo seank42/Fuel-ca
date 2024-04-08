@@ -2,8 +2,45 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const AllDiesel = () => {
+const AllDiesel = ({ search, authenticated }) => {
+  
+  const [fuels, setFuels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredFuels, setFilteredFuels] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`http://localhost/api/fuels`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFuels(response.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (search.length <= 1) {
+      setFilteredFuels(fuels);
+    } else {
+      let filter = fuels.filter((fuel) => {
+        return fuel.title.toLowerCase().includes(search.toLowerCase());
+      });
+      setFilteredFuels(filter);
+    }
+  }, [fuels, search]);
+  if (loading) return "Loading...";
+
   const cardIndices = Array.from({ length: 20 }, (_, index) => index);
 
   return (

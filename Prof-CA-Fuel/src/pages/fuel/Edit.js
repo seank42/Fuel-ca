@@ -90,7 +90,7 @@ const Edit = () => {
       <Row className="justify-content-center">
         <Col md={8}>
           <h2 className="mb-3 ml-3 text-lg">
-            <b>Edit Course</b>
+            <b>Edit Fuel</b>
           </h2>
           <Form
             className="flex flex-col items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-zinc-300"

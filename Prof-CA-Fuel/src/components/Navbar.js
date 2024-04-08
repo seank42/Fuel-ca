@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Nav, DropdownButton, Dropdown, Button, Container } from 'react-bootstrap';
 
-const TheNavbar = ({ authenticated, onAuthenticated }) => {
+const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) => {
   const navigate = useNavigate();
 
   const signup = () => {
@@ -10,18 +10,23 @@ const TheNavbar = ({ authenticated, onAuthenticated }) => {
     navigate('/login');
   };
 
+  const handleChange = (e) => {
+    navigate("/all-diesel");
+    onHandleChange(e);
+  };
+
   return (
     <Navbar bg="dark" className=" mb-2">
       <Container>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="">
-            <Nav.Link as={Link} to="/" className="text-primary me-3 fw-bold"> Home </Nav.Link>
+            <Nav.Link as={Link} to="/home" className="text-primary me-3 fw-bold"> Home </Nav.Link>
             <Nav.Link as={Link} to="/create-station" className="text-light me-3">
               Create Station
             </Nav.Link>
-            <Nav.Link as={Link} to="/edit-station" className="text-light me-3">
+            {/* <Nav.Link as={Link} to="/edit-station" className="text-light me-3">
               Edit Station
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">
               View E-charging stations
             </Nav.Link>
