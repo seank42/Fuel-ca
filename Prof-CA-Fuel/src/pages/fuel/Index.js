@@ -9,7 +9,7 @@ const Index = ({ authenticated }) => {
 
   useEffect(() => {
     axios
-      .get(``)
+      .get(`http://localhost/api/fuels`)
       .then((response) => {
         setStations(response.data);
         setLoading(false); // Set loading to false when data is received

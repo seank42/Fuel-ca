@@ -68,7 +68,7 @@ const Create = () => {
         .then((response) => {
           // this logs the response and navigate to the fuel stations page
           console.log(response);
-          navigate("/fuelStations");
+          navigate("/fuelStation");
         })
         .catch((err) => {
           console.error(err);

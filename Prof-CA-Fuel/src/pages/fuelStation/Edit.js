@@ -17,10 +17,17 @@ const Edit = () => {
   });
 
   useEffect(() => {
+    let token = localStorage.getItem("token");
     axios
-      .get(`http://localhost/api/fuelStations/${id}`)
+      .get(`http://localhost/api/fuelStations/${id}`,
+      {  headers: {
+        Authorization: `Bearer ${token}`,
+      }} 
+    )
+      
       .then((response) => {
-        setForm(response.data);
+        setForm(response.data.data);
+        console.log(response, "response")
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -67,7 +74,7 @@ const Edit = () => {
         })
         .then((response) => {
           console.log(response);
-          navigate("/fuelStations");
+          navigate("/fuelStation");
         })
         .catch((err) => {
           console.error(err);
@@ -84,6 +91,7 @@ const Edit = () => {
       <Form
         className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
         onSubmit={submitForm}
+        method="POST"
       >
         <Input
           className="form-control"

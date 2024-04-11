@@ -49,14 +49,14 @@ function App() {
 
   return (
     <Router>
-      <TheNavbar authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>
+      <TheNavbar authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>
       <Routes>
-        <Route path="/home" element={<Home authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
+        <Route path="/home" element={<Home authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
         <Route path="/" element={<LoginForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/register" element={<RegisterForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/fuel" element={<FuelIndex authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
-        <Route path="/all-petrol" element={<AllPetrol authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
-        <Route path="/all-diesel" element={<AllDiesel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
+        <Route path="/all-petrol" element={<AllPetrol authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
+        <Route path="/all-diesel" element={<AllDiesel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
         <Route path="/show" element={<FuelShow />} />
         <Route path="/create-station" element={<FuelCreate />} /> 
         <Route path="/edit-station/:id" element={<FuelEdit />} />
@@ -64,10 +64,10 @@ function App() {
         <Route path="/create" element={<FuelCreate />} /> 
         <Route path="/edit-station" element={<FuelEdit />} />
         <Route path="/view-EPorts" element={<ViewEPorts/>} />
-        <Route path="/fuelstation" element={<FuelStationIndex/>} />
-        <Route path="/fuelstation/show" element={<FuelStationShow/>} />
+        <Route path="/fuelstation" element={<FuelStationIndex authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
+        <Route path="/fuelstation/:id" element={<FuelStationShow authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/fuelstation/create" element={<FuelStationCreate/>} />
-        <Route path="/fuelstation/edit" element={<FuelStationEdit/>} />
+        <Route path="/fuelstation/:id/edit" element={<FuelStationEdit/>} />
         <Route path="*" element={<PageNotFound />} /> 
       </Routes>
     </Router>

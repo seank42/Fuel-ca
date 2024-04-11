@@ -39,7 +39,7 @@ const Home = () => {
         <tbody>
           <tr>
             {Array.from({ length: 6 }).map((_, index) => (
-              <td key={index} style={{ borderLeft: '1px solid black' }}>Price Pl:</td>
+              <td key={index} style={{ borderLeft: '1px solid black' }}>Price :</td>
             ))}
           </tr>
           <tr>

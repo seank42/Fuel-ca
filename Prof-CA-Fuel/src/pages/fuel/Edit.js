@@ -16,8 +16,14 @@ const Edit = () => {
   });
 
   useEffect(() => {
+    let token = localStorage.getItem("token");
     axios
-      .get(`http://localhost/api/fuels/${id}`)
+      .get(`http://localhost/api/fuels/${id}`, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setForm(response.data);
       })
