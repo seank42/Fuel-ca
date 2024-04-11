@@ -1,29 +1,31 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 
-const LoginForm = ({ onAuthenticated }) => {
+const LoginForm = ({ authenticated, onAuthenticated }) => {
   const errStyle = {
     color: "red",
   };
 
   const [form, setForm] = useState({
-    email: "GG@gmail.com",
-    password: "secret123",
+    email: "",
+    password: "",
   });
+
   const [errMessage, setErrMessage] = useState("");
-  const navigate = useNavigate(); // Hook to access navigation functions
+  const navigate = useNavigate();
 
   const handleClick = () => {
     axios
-      .post(`/api/login`, { // Replace with your actual login endpoint
+      .post(`http://localhost/api/auth/login`, {
         email: form.email,
         password: form.password,
       })
       .then((response) => {
         console.log(response.data);
         onAuthenticated(true, response.data.token);
-        navigate('/'); // Redirect to Home after successful login
+        navigate("/home");
       })
       .catch((err) => {
         console.error(err);
@@ -41,24 +43,44 @@ const LoginForm = ({ onAuthenticated }) => {
 
   return (
     <>
-      Email:{" "}
-      <input
-        onChange={handleForm}
-        type="text"
-        name="email"
-        value={form.email}
-      />
-      <br />
-      Password:{" "}
-      <input
-        onChange={handleForm}
-        type="password"
-        name="password"
-        value={form.password}
-      />
-      <br />
-      <button onClick={handleClick}>Submit</button>
-      <p style={errStyle}>{errMessage}</p>
+      <div className="container mt-5">
+        <div className="text-center">
+          <h2>User Login</h2>
+        </div>
+        <div className="d-flex flex-column align-items-center mt-4">
+          <Form>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                value={form.email}
+                onChange={handleForm}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={form.password}
+                onChange={handleForm}
+              />
+            </Form.Group>
+
+            <Button variant="primary" onClick={handleClick}>
+              Submit
+            </Button>
+          </Form>
+          <p style={errStyle}>{errMessage}</p>
+          <div>
+            <Link to="/register">Don't have an account? Register here.</Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
