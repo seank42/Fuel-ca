@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import FuelCard from "../../components/FuelCard"; // Changed import from "../../components/FuelStationCard"
+import FuelCard from "../../components/FuelCard";
 
 const Index = ({ search, authenticated, resource }) => {
   const [fuels, setFuels] = useState([]);
@@ -19,6 +19,7 @@ const Index = ({ search, authenticated, resource }) => {
       .then((response) => {
         setFuels(response.data.data);
         setLoading(false);
+
       })
       .catch((err) => {
         console.error("Error fetching fuels:", err);
@@ -55,11 +56,12 @@ const Index = ({ search, authenticated, resource }) => {
             <div key={i} className="col-md-4 mb-3">
               <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
                 <FuelCard
-                  fuel_type={fuel.fuel_type}
+                  fuel_type={fuel.feul_type}
                   price={fuel.price}
                   rating={fuel.rating}
                   authenticated={authenticated}
                 />
+               
               </Link>
             </div>
           ))

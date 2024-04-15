@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 //components
 import FuelStationCard from "../../components/FuelStationCard";
+import AddFavorite from "../favourites/AddFavourites";
+
 
 const Index = ({ search, authenticated, resource }) => {
   const [fuelStations, setFuelStations] = useState([]);
@@ -49,9 +51,11 @@ const Index = ({ search, authenticated, resource }) => {
         <h2 className="pb-2 mb-2 text-xl">
           <b>Fuel Stations</b>
         </h2>
+        
         <Link className="btn btn-outline-success" to="/fuelStation/create">
           Create
         </Link>
+      
       </div>
       <div className="row mt-5">
         {filteredFuelStations?.length > 0 ? (
@@ -60,11 +64,14 @@ const Index = ({ search, authenticated, resource }) => {
               <Link to={`/fuelStation/${fuelStation.id}`} className="text-dark text-decoration-none">
                 <FuelStationCard
                   title={fuelStation.title}
-                  points={fuelStation.description}
+                  description={fuelStation.description}
                   authenticated={authenticated}
                 />
-               
+               <Link>
+              <AddFavorite/>
               </Link>
+              </Link>
+              
             </div>
           ))
         ) : (

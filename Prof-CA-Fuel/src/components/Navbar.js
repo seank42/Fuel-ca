@@ -16,19 +16,13 @@ const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) =
     onHandleChange(e.target.value); 
   };
 
-  const handleChangeP = (e) => {
-    navigate('/allpetrol');
-    onHandleChange(e.target.value); 
-  };
-
   const handleChangeD = (e) => {
-    navigate('/alldiesel');
+    navigate('/allfuel');
     onHandleChange(e.target.value); 
   };
 
   const shouldShowSearchBarFuelStation = location.pathname === '/fuelstation';
-  const shouldShowSearchBarAllPetrol = location.pathname === '/all-petrol';
-  const shouldShowSearchBarAllDiesel = location.pathname === '/all-diesel';
+  const shouldShowSearchBarAllDiesel = location.pathname === '/all-fuel';
 
   return (
     <Navbar bg="dark" variant="dark" className="mb-2">
@@ -36,24 +30,11 @@ const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) =
       <Nav className="me-auto">
         <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">View E-Charging Stations</Nav.Link>
         <Nav.Link as={Link} to="/fuelstation" className="text-light me-3">Fuel Stations</Nav.Link>
-        <NavDropdown title="Fuel Prices" id="basic-nav-dropdown" className="ms-3">
-          <NavDropdown.Item as={Link} to="/all-petrol" className="text-dark me-3">All Petrol</NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/all-diesel" className="text-dark me-3">All Diesel</NavDropdown.Item>
-        </NavDropdown>
+        <Nav.Link as={Link} to="/all-fuel" className="text-light me-3">All Fuel</Nav.Link>
+      <Nav.Link as={Link} to="/favourite" className="text-light me-3">Favourites</Nav.Link>
+
       </Nav>
       {shouldShowSearchBarFuelStation && (
-        <Form className="d-flex">
-          <FormControl
-            type="search"
-            placeholder="Enter search..."
-            className="mr-3"
-            aria-label="Search"
-            onChange={onHandleChange}
-            value={search}
-          />
-        </Form>
-      )}
-      {shouldShowSearchBarAllPetrol && (
         <Form className="d-flex">
           <FormControl
             type="search"

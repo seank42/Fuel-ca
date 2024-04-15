@@ -18,14 +18,15 @@ const Edit = () => {
   useEffect(() => {
     let token = localStorage.getItem("token");
     axios
-      .get(`http://localhost/api/fuels/${id}`, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(`http://localhost/api/fuels/${id}`,
+      {  headers: {
+        Authorization: `Bearer ${token}`,
+      }} 
+    )
+      
       .then((response) => {
-        setForm(response.data);
+        setForm(response.data.data);
+        console.log(response, "response")
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -72,7 +73,7 @@ const Edit = () => {
         })
         .then((response) => {
           console.log(response);
-          navigate("/home");
+          navigate("/all-fuel");
         })
         .catch((err) => {
           console.error(err);
@@ -89,6 +90,7 @@ const Edit = () => {
       <Form
         className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
         onSubmit={submitForm}
+        method="POST"
       >
         <Input
           className="form-control"
@@ -96,7 +98,7 @@ const Edit = () => {
           onChange={handleForm}
           value={form.fuel_type}
           name="fuel_type"
-          placeholder="Fuel Type"
+          placeholder="fuel_type"
         />
         <span className="text-danger">{errors?.fuel_type?.message}</span>
         <Input
@@ -105,7 +107,7 @@ const Edit = () => {
           onChange={handleForm}
           value={form.price}
           name="price"
-          placeholder="Price"
+          placeholder="price"
         />
         <span className="text-danger">{errors?.price?.message}</span>
         <Input
@@ -114,7 +116,7 @@ const Edit = () => {
           onChange={handleForm}
           value={form.rating}
           name="rating"
-          placeholder="Rating"
+          placeholder="rating"
         />
         <span className="text-danger">{errors?.rating?.message}</span>
         <button className="btn btn-primary" type="submit">

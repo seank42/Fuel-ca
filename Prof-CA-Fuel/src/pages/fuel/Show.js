@@ -1,60 +1,65 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DeleteButton from "../../components/DeleteButton";
 
 const Show = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [fuelStation, setFuelStation] = useState(null);
+
+  const [fuel, setFuel] = useState(null); // Changed variable name from fuelStation to fuel
 
   useEffect(() => {
     let token = localStorage.getItem("token");
+
     axios
-      .get(`https://college-api.vercel.app/api/fuelStations/${id}`, {
+      .get(`http://localhost/api/fuels/${id}`, { // Changed API endpoint to fetch fuel details
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        setFuelStation(response.data.data);
+        setFuel(response.data.data); // Changed state variable from fuelStation to fuel
       })
       .catch((err) => {
-        console.log(err);
+        console.error("Error fetching data:", err);
       });
   }, [id]);
 
-  if (!fuelStation) return <h3>Loading fuel station..</h3>;
+  if (!fuel) return <h3>Loading fuel...</h3>; // Changed loading message from "Loading fuel station.." to "Loading fuel..."
 
   return (
     <>
       <h2 className="text-xl mb-5 ml-5 mt-5 pt-5">
-        <b>{fuelStation.title}</b>
+        <b>Fuel</b> 
       </h2>
-      <div className="flex flex-col-2 ml-5 mr-5 m-5 border border-zinc-300 p-5 ">
-        <div className=" text-left lg-center ">
-          <div className="bg-white ">
-            <div className="p-2 text-lg">
-              <p className="pb-3">
-                <b>Description: </b>
-                {fuelStation.description}
-              </p>
-              <p className="pb-3">
-                <b>Latitude: </b>
-                {fuelStation.latitude}
-              </p>
-              <p className="pb-3">
-                <b>Longitude: </b>
-                {fuelStation.longitude}
-              </p>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6 mx-auto">
+            <div className="card border-0 shadow">
+              <div className="card-body">
+                <p className="card-text pb-3">
+                  <b>Fuel Type: </b>
+                  {fuel.fuel_type} 
+                </p>
+                <p className="card-text pb-3">
+                  <b>price: </b>
+                  {fuel.price} 
+                </p>
+                <p className="card-text pb-3">
+                  <b>rating: </b>
+                  {fuel.rating} 
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col-2 mt-4 ml-3 ">
-        <Link to={`/fuelStations/${id}/edit`}>
+      <div className="mt-4 ml-3">
+        <Link to={`/fuel/${id}/edit`}> 
           <button className="btn btn-outline btn-info mr-3">Edit</button>
         </Link>
-
+        <DeleteButton/> 
       </div>
     </>
   );
