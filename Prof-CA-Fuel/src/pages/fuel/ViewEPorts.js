@@ -1,48 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import axios from 'axios';
 
 const containerStyle = {
   width: '100%',
-    height: '500px'
+  height: '500px'
 };
 
-const center = { lat: 18.52043, lng: 73.856743 };
+const center = { lat: 53.4494762, lng: -7.5029786 };
 
 function ViewEPorts() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAuHnwnyAwPe4AjNkWs0KJs49umDZuyhjo"
-  })
+    googleMapsApiKey:  "AIzaSyAuHnwnyAwPe4AjNkWs0KJs49umDZuyhjo"
+  });
 
-  const [map, setMap] = React.useState(null)
+  const [fuelStations, setFuelStations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-
-    setMap(map)
-  }, [])
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`http://localhost/api/fuelStations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFuelStations(response.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
 
   return isLoaded ? (
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
-        <Marker position={{ lat: 18.52045, lng: 73.856745 }} />
-
-        <Marker position={{ lat: 18.52043, lng: 73.856743 }} />
-        { /* Child components, such as markers, info windows, etc. */ }
-        <></>
-      </GoogleMap>
-  ) : <></>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={10}
+    >
+      {fuelStations.map((station, index) => (
+        <Marker
+          key={index}
+          position={{ lat: station.latitude, lng: station.longitude }}
+        />
+      ))}
+    </GoogleMap>
+  ) : <></>;
 }
 
-export default React.memo(ViewEPorts)
+export default React.memo(ViewEPorts);

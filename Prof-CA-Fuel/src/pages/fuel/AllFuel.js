@@ -32,7 +32,7 @@ const Index = ({ search, authenticated, resource }) => {
       setFilteredFuels(fuels);
     } else {
       let filter = fuels.filter((fuel) => {
-        return fuel?.title?.toLowerCase().includes(search?.toLowerCase());
+        return fuel?.fuel_type?.toLowerCase().includes(search?.toLowerCase());
       });
       setFilteredFuels(filter);
     }
@@ -56,7 +56,7 @@ const Index = ({ search, authenticated, resource }) => {
             <div key={i} className="col-md-4 mb-3">
               <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
                 <FuelCard
-                  fuel_type={fuel.feul_type}
+                  fuel_type={fuel.fuel_type}
                   price={fuel.price}
                   rating={fuel.rating}
                   authenticated={authenticated}

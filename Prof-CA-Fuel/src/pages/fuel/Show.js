@@ -59,7 +59,6 @@ const Show = () => {
         <Link to={`/fuel/${id}/edit`}> 
           <button className="btn btn-outline btn-info mr-3">Edit</button>
         </Link>
-        <DeleteButton/> 
       </div>
     </>
   );

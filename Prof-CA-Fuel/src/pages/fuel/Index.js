@@ -31,7 +31,7 @@ const Index = ({ search, authenticated, resource }) => {
       setFilteredFuels(fuels);
     } else {
       let filter = fuels.filter((fuel) => {
-        return fuel?.title?.toLowerCase().includes(search?.toLowerCase());
+        return fuel?.price?.toLowerCase().includes(search?.toLowerCase());
       });
       setFilteredFuels(filter);
     }
