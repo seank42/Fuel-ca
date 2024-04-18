@@ -1,68 +1,113 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
-import FuelCard from "../../components/FuelCard";
+import FuelCard from '../../components/FuelCard';
 
-const Index = ({ search, authenticated, resource }) => {
+function FuelDelete({ fuel, deleteFuel }) {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleDelete = () => {
+    deleteFuel(fuel);
+    handleClose();
+  };
+
+  return (
+    <>
+      <Button variant="danger" onClick={handleShow}>
+        Delete
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete {fuel.fuel_type}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{`Are you sure you want to delete ${fuel.fuel_type} fuel?`}</p>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Yes
+          </Button>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
+
+const Index = ({ search }) => {
   const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredFuels, setFilteredFuels] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get(`http://localhost/api/fuels`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchFuels = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost/api/fuels', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setFuels(response.data.data);
         setLoading(false);
-
-      })
-      .catch((err) => {
-        console.error("Error fetching fuels:", err);
+      } catch (error) {
+        console.error('Error fetching fuels:', error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchFuels();
   }, []);
 
   useEffect(() => {
-    if (search?.length <= 1) {
+    if (!search || search.length <= 1) {
       setFilteredFuels(fuels);
     } else {
-      let filter = fuels.filter((fuel) => {
-        return fuel?.fuel_type?.toLowerCase().includes(search?.toLowerCase());
-      });
+      const filter = fuels.filter((fuel) =>
+        fuel?.fuel_type?.toLowerCase().includes(search.toLowerCase())
+      );
       setFilteredFuels(filter);
     }
   }, [fuels, search]);
 
-  if (loading) return "Loading...";
+  const handleDeleteFuel = async (fuelToDelete) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost/api/fuels/${fuelToDelete.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFuels((prevFuels) => prevFuels.filter((fuel) => fuel.id !== fuelToDelete.id));
+    } catch (error) {
+      console.error('Error deleting fuel:', error);
+    }
+  };
+
+  if (loading) return 'Loading...';
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center">
         <h2 className="pb-2 mb-2 text-xl">
-          <b>Fuel</b>
+          <b>Fuels</b>
         </h2>
-        <Link className="btn btn-outline-success" to="/fuel/create">
-          Create
+        <Link class="btn btn-outline-success" to="/fuel/create"> Create
         </Link>
       </div>
       <div className="row mt-5">
         {filteredFuels?.length > 0 ? (
           filteredFuels.map((fuel, i) => (
             <div key={i} className="col-md-4 mb-3">
-              <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
-                <FuelCard
-                  fuel_type={fuel.fuel_type}
-                  price={fuel.price}
-                  rating={fuel.rating}
-                  authenticated={authenticated}
-                />
-               
-              </Link>
+              <Link to={`/fuel/${fuel.id}`} class="text-dark text-decoration-none">
+              <FuelCard fuel_type={fuel.fuel_type} price={fuel.price} rating={fuel.rating}/>
+              </Link> 
+              <FuelDelete fuel={fuel} deleteFuel={handleDeleteFuel} />
             </div>
           ))
         ) : (
