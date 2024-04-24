@@ -22,7 +22,6 @@ import FavouriteIndex from './pages/favouritePages/Index';
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
   const [filteredFuel, setFilteredFuel] = useState([]);
 
   useEffect(() => {
@@ -45,13 +44,7 @@ function App() {
     setSearch(e.target.value);
   };
 
-  const handleFuelTypeChange = (value) => {
-    if (selectedFuelTypes.includes(value)) {
-      setSelectedFuelTypes(selectedFuelTypes.filter((type) => type !== value));
-    } else {
-      setSelectedFuelTypes([...selectedFuelTypes, value]);
-    }
-  };
+  
 
   return (
     <Router>
@@ -60,8 +53,8 @@ function App() {
         <Route path="/home" element={<Home authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
         <Route path="/" element={<LoginForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/register" element={<RegisterForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
-        <Route path="/fuel" element={<FuelIndex authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
-        <Route path="/all-fuel" element={<AllFuel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search} selectedFuelTypes={selectedFuelTypes} handleFuelTypeChange={handleFuelTypeChange}/>} />
+        <Route path="/fuel" element={<FuelIndex authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search} />} />
+        <Route path="/all-fuel" element={<AllFuel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
         <Route path="/fuel/:id" element={<FuelShow />} />
         <Route path="/fuel/create" element={<FuelCreate />} /> 
         <Route path="/fuel/:id/edit" element={<FuelEdit />} />

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton'; // Import DropdownButton
+import Dropdown from 'react-bootstrap/Dropdown'; // Import Dropdown
 import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
 import FuelCard from '../../components/FuelCard';
@@ -43,7 +45,7 @@ const Index = ({ search }) => {
   const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredFuels, setFilteredFuels] = useState([]);
-  const [selectedFuelType, setSelectedFuelType] = useState(null);
+  const [selectedFuelType, setSelectedFuelType] = useState(null); // Initialize as null
 
   useEffect(() => {
     const fetchFuels = async () => {
@@ -71,7 +73,7 @@ const Index = ({ search }) => {
 
   const filterFuels = () => {
     let filtered = [...fuels];
-    if (selectedFuelType) {
+    if (selectedFuelType !== null) { // Check if selectedFuelType is not null
       filtered = filtered.filter(fuel => fuel.fuel_type === selectedFuelType);
     }
     if (search && search.length > 1) {
@@ -88,9 +90,17 @@ const Index = ({ search }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setFuels(prevFuels => prevFuels.filter(fuel_type => fuel_type.id !== fuelToDelete.id));
+      setFuels(prevFuels => prevFuels.filter(fuel => fuel.id !== fuelToDelete.id));
     } catch (error) {
       console.error('Error deleting fuel:', error);
+    }
+  };
+
+  const handleFuelTypeChange = (value) => {
+    if (selectedFuelType === value) {
+      setSelectedFuelType(null); // Reset to null if already selected
+    } else {
+      setSelectedFuelType(value);
     }
   };
 
@@ -102,17 +112,16 @@ const Index = ({ search }) => {
         <h2 className="pb-2 mb-2 text-xl">
           <b>Fuels</b>
         </h2>
-        <div className="dropdown">
-          <Button variant="outline-primary" id="dropdown-basic" className="dropdown-toggle" onClick={() => setSelectedFuelType(null)}>
-            Filter by Fuel Type
-          </Button>
-
-          <ul className="dropdown-menu">
-            {fuelType.map((type, index) => (
-              <li key={index}><button className="dropdown-item " onClick={() => setSelectedFuelType(type)}>{type}</button></li>
-            ))}
-          </ul>
-        </div>
+        <DropdownButton
+          variant="outline-primary"
+          id="dropdown-basic"
+          title="Filter by Fuel Type" // Set the button text using title prop
+          className="dropdown"
+        >
+          {fuelType.map((type, index) => (
+            <Dropdown.Item key={index} onClick={() => handleFuelTypeChange(type)}>{type}</Dropdown.Item>
+          ))}
+        </DropdownButton>
         <Link className="btn btn-outline-success" to="/fuel/create"> Create
         </Link>
       </div>
@@ -121,9 +130,9 @@ const Index = ({ search }) => {
           filteredFuels.map((fuel, i) => (
             <div key={i} className="col-md-4 mb-3">
               <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
-                <FuelCard fuel_type={fuel.fuel_type} price={fuel.price} rating={fuel.rating}/>
+                <FuelCard fuel={fuel} />
               </Link> 
-              <FuelDelete  fuel={fuel} deleteFuel={handleDeleteFuel} />
+              <FuelDelete fuel={fuel} deleteFuel={handleDeleteFuel} />
             </div>
           ))
         ) : (
