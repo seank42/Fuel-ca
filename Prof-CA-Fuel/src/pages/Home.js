@@ -63,11 +63,11 @@ const Home = () => {
 
   const tableStructure = () => {
     return (
-      <Table responsive className="custom-table bg-light">
+      <Table responsive class="custom-table bg-light">
         <thead>
           <tr>
             {fuels.map((fuel, index) => (
-              <th key={index} style={{ borderTop: '1px solid black', borderLeft: '1px solid black' }} className="vertical-line">Fuel Type: {fuel.fuel_type}</th>
+              <th key={index} style={{ borderTop: '1px solid black', borderLeft: '1px solid black' }} class="vertical-line">Fuel Type: {fuel.fuel_type}</th>
             ))}
           </tr>
         </thead>
@@ -88,9 +88,9 @@ const Home = () => {
   };
 
   return (
-    <div className='bg-light'>
-      <h1 className="text-center text-dark">Welcome to Fuel Finder</h1>
-      <h2 className="text-start text-dark">Fuel Prices</h2>
+    <div class='bg-light'>
+      <h1 class="text-center text-dark">Welcome to Fuel Finder</h1>
+      <h2 class="text-start text-dark">Fuel Prices</h2>
       {/* Render the tableStructure */}
       {loading ? <p>Loading...</p> : tableStructure()}
           
@@ -108,7 +108,7 @@ const Home = () => {
       )}
 
       {/* Render the NewsCardRow */}
-      <h2 className="text-start text-dark">Latest News</h2>
+      <h2 class="text-start text-dark">Latest News</h2>
       <NewsCard />
     </div>
   );

@@ -43,11 +43,11 @@ const LoginForm = ({ authenticated, onAuthenticated }) => {
 
   return (
     <>
-      <div className="container mt-5">
-        <div className="text-center">
+      <div class="container mt-5">
+        <div class="text-center">
           <h2>User Login</h2>
         </div>
-        <div className="d-flex flex-column align-items-center mt-4">
+        <div class="d-flex flex-column align-items-center mt-4">
           <Form>
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>

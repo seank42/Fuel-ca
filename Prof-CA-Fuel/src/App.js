@@ -9,24 +9,21 @@ import PageNotFound from './pages/PageNotFound';
 import TheNavbar from './components/Navbar';
 import FuelCreate from './pages/fuel/Create'; 
 import FuelEdit from './pages/fuel/Edit'; 
-import FuelShow from './pages/fuel/Show'
+import FuelShow from './pages/fuel/Show';
 import ViewEPorts  from './pages/fuel/ViewEPorts'; 
 import FuelStationCreate from './pages/fuelStation/Create';
 import FuelStationEdit from './pages/fuelStation/Edit';
 import FuelStationIndex from './pages/fuelStation/Index';
 import FuelStationShow from './pages/fuelStation/Show';
 import AllFuel from './pages/fuel/AllFuel';
-import AddFavorite from './pages/favourites/AddFavourites';
-import DeleteFavorite from './pages/favourites/DeleteFavourites';
-import FavouriteIndex from './pages/favourites/Index';
-
-
+import Favourite from './components/favourites/Favourite';
+import FavouriteIndex from './pages/favouritePages/Index';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [search, setSearch] = useState("");
-
-  let token = localStorage.getItem("token");
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
+  const [filteredFuel, setFilteredFuel] = useState([]);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -43,11 +40,18 @@ function App() {
       localStorage.removeItem("token");
     }
   };
-  
+
   const onHandleChange = (e) => {
     setSearch(e.target.value);
   };
-  
+
+  const handleFuelTypeChange = (value) => {
+    if (selectedFuelTypes.includes(value)) {
+      setSelectedFuelTypes(selectedFuelTypes.filter((type) => type !== value));
+    } else {
+      setSelectedFuelTypes([...selectedFuelTypes, value]);
+    }
+  };
 
   return (
     <Router>
@@ -57,7 +61,7 @@ function App() {
         <Route path="/" element={<LoginForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/register" element={<RegisterForm authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/fuel" element={<FuelIndex authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
-        <Route path="/all-fuel" element={<AllFuel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search}/>} />
+        <Route path="/all-fuel" element={<AllFuel authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange} search={search} selectedFuelTypes={selectedFuelTypes} handleFuelTypeChange={handleFuelTypeChange}/>} />
         <Route path="/fuel/:id" element={<FuelShow />} />
         <Route path="/fuel/create" element={<FuelCreate />} /> 
         <Route path="/fuel/:id/edit" element={<FuelEdit />} />
@@ -69,9 +73,8 @@ function App() {
         <Route path="/fuelstation/:id" element={<FuelStationShow authenticated={authenticated} onAuthenticated={onAuthenticated} onHandleChange={onHandleChange}/>} />
         <Route path="/fuelstation/create" element={<FuelStationCreate/>} />
         <Route path="/fuelstation/:id/edit" element={<FuelStationEdit/>} />
-        <Route path="/favourite" element={<FavouriteIndex />} /> 
-        <Route path="/favourite/add" element={<AddFavorite />} />
-        <Route path="/favourite/remove" element={<DeleteFavorite />} />
+        <Route path="/favourite" element={<Favourite authenticated={authenticated} onAuthenticated={onAuthenticated}/>} />
+        <Route path="/favourites/index" element={<FavouriteIndex authenticated={authenticated} onAuthenticated={onAuthenticated}/>} /> 
         <Route path="*" element={<PageNotFound />} /> 
       </Routes>
     </Router>

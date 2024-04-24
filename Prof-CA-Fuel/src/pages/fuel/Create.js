@@ -8,24 +8,26 @@ const Create = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
+    fuel_station_id: "", 
     fuel_type: "",
     price: "",
     rating: "",
   });
+  const [fuelStations, setFuelStations] = useState([]); 
 
   useEffect(() => {
     let token = localStorage.getItem("token");
     axios
-    .get(`http://localhost/api/fuels`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+      .get("http://localhost/api/fuelStations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-        console.log(response.data.data);
+        setFuelStations(response.data.data); 
       })
       .catch((error) => {
-        console.error("Error fetching fuels:", error);
+        console.error("Error fetching fuel stations:", error);
       });
   }, []);
 
@@ -58,10 +60,10 @@ const Create = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    if (isRequired(["fuel_type", "price", "rating"])) {
+    if (isRequired(["fuel_station_id", "fuel_type", "price", "rating"])) {
       let token = localStorage.getItem("token");
       axios
-        .post("http://localhost/api/fuels", form , {
+        .post("http://localhost/api/fuels", form, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,6 +89,24 @@ const Create = () => {
         onSubmit={submitForm}
         method="POST"
       >
+        <div>
+          <div className="w-72 item-center border border-gray-300">
+            <select
+              name="fuel_station_id"
+              onChange={handleForm}
+              className="form-select"
+              value={form.fuel_station_id}
+            >
+              <option value="">-- Please choose a fuel station --</option>
+              {fuelStations.map((fuelstation) => (
+                <option key={fuelstation.id} value={fuelstation.id}>
+                  {fuelstation.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <span className="text-danger">{errors?.fuel_station_id?.message}</span>
+        </div>
         <div>
           <div className="w-72 item-center border border-gray-300">
             <select

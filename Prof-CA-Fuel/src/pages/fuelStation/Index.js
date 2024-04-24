@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import FuelStationCard from "../../components/FuelStationCard";
 import { deleteFuelStationWithFuels } from "../../utils/deleteFuelStation";
-import AddFavorite from "../favourites/AddFavourites";
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -21,7 +20,7 @@ function FuelStationDelete({fuelStation, deleteFuelStation}) {
 
   return (
     <>
-    <Button variant="danger" onClick={handleShow}>
+    <Button variant="outline-danger" onClick={handleShow}>
       Delete
     </Button>
     <Modal show={show} onHide={handleClose}>
@@ -80,35 +79,87 @@ const Index = ({ search, authenticated, resource }) => {
     deleteFuelStationWithFuels(fuelStation);
   };
 
+  const handleFavouriteFuelStation = async (fuelStationId) => {
+    const token = localStorage.getItem('token');
+    try {
+     const response = await axios.post(`http://localhost/api/favorites/${fuelStationId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response)
+
+    } catch (error) {
+      console.error("Problem favouriting fuel station:", error);
+    }
+  };
+
+  const handleUnfavouriteFuelStation = async (fuelStationId) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost/api/favorites/${fuelStationId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const response = await axios.get(`http://localhost/api/fuelStations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFuelStations(response.data.data);
+    } catch (error) {
+      console.error("Problem unfavouriting fuel station:", error);
+    }
+  };
+
   if (loading) return "Loading...";
 
   return (
-    <div class="container mt-5">
-      <div class="d-flex justify-content-between align-items-center">
-        <h2 class="pb-2 mb-2 text-xl">
+    <div className="container mt-5"> 
+      <div className="d-flex justify-content-between align-items-center">
+        <h2 className="pb-2 mb-2 text-xl"> 
           <b>Fuel Stations</b>
         </h2>
-        <Link class="btn btn-outline-success" to="/fuelStation/create">
+        <Link className="btn btn-outline-success" to="/fuelstation/create">
           Create
         </Link>
       </div>
-      <div class="row mt-5">
+      <div className="row mt-5">
         {filteredFuelStations?.length > 0 ? (
           filteredFuelStations.map((fuelStation, i) => (
-            <div key={i} class="col-md-4 mb-3">
-              <Link to={`/fuelStation/${fuelStation.id}`} class="text-dark text-decoration-none">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{fuelStation.title}</h5>
-                    <p class="card-text">{fuelStation.description}</p>
-                  </div>
-                 
-                </div>
+            <div key={i} className="col-md-4 mb-3"> 
+              <Link to={`/fuelStation/${fuelStation.id}`} className="text-dark text-decoration-none"> 
+                <FuelStationCard
+                  title={fuelStation.title}
+                  description={fuelStation.description}
+                  longitude={fuelStation.longitude}
+                  latitude={fuelStation.latitude}
+                />
               </Link>
+              <div>
+                {authenticated && (
+                  <Button
+                    onClick={() => handleFavouriteFuelStation(fuelStation.id)}
+                    variant="outline-info"
+                  >
+                    Favourite
+                  </Button>
+                )}
+                {authenticated && (
+                  <Button
+                    onClick={() => handleUnfavouriteFuelStation(fuelStation.id)}
+                    variant="outline-warning"
+                  >
+                    Unfavourite
+                  </Button>
+                )}
+              </div>
               <FuelStationDelete
-                    fuelStation={fuelStation}
-                    deleteFuelStation={handleDeleteFuelStation}
-                  />
+                fuelStation={fuelStation}
+                deleteFuelStation={handleDeleteFuelStation}
+              />
             </div>
           ))
         ) : (
@@ -118,5 +169,6 @@ const Index = ({ search, authenticated, resource }) => {
     </div>
   );
 };
+
 
 export default Index;

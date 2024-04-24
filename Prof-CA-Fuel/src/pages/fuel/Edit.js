@@ -106,48 +106,48 @@ const Edit = () => {
 
   return (
     <>
-      <h2 className="mb-3 ml-3 text-lg">
+      <h2 class="mb-3 ml-3 text-lg">
         <b>Edit Fuel </b>
       </h2>
       <Form
-        className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
+        class="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
         onSubmit={submitForm}
         method="POST"
       >
         <div>
-          <div className="w-72 item-center border border-gray-300">
+          <div class="w-72 item-center border border-gray-300">
             <select
               name="fuel_type"
               onChange={handleForm}
-              className="form-select"
+              class="form-select"
               value={form.fuel_type}
             >
               <option value="">-- Please choose a fuel type --</option>
               {fuelsDrop}
             </select>
           </div>
-          <span className="text-danger">{errors?.fuel_type?.message}</span>
+          <span class="text-danger">{errors?.fuel_type?.message}</span>
         </div>
 
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.price}
           name="price"
           placeholder="price"
         />
-        <span className="text-danger">{errors?.price?.message}</span>
+        <span class="text-danger">{errors?.price?.message}</span>
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.rating}
           name="rating"
           placeholder="rating"
         />
-        <span className="text-danger">{errors?.rating?.message}</span>
-        <button className="btn btn-primary" type="submit">
+        <span class="text-danger">{errors?.rating?.message}</span>
+        <button class="btn btn-primary" type="submit">
           Submit
         </button>
       </Form>

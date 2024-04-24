@@ -18,7 +18,7 @@ function FuelDelete({ fuel, deleteFuel }) {
 
   return (
     <>
-      <Button variant="danger" onClick={handleShow}>
+      <Button variant="outline-danger" onClick={handleShow}>
         Delete
       </Button>
       <Modal show={show} onHide={handleClose}>
@@ -43,6 +43,7 @@ const Index = ({ search }) => {
   const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredFuels, setFilteredFuels] = useState([]);
+  const [selectedFuelType, setSelectedFuelType] = useState(null);
 
   useEffect(() => {
     const fetchFuels = async () => {
@@ -65,15 +66,19 @@ const Index = ({ search }) => {
   }, []);
 
   useEffect(() => {
-    if (!search || search.length <= 1) {
-      setFilteredFuels(fuels);
-    } else {
-      const filter = fuels.filter((fuel) =>
-        fuel?.fuel_type?.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilteredFuels(filter);
+    filterFuels();
+  }, [fuels, selectedFuelType, search]);
+
+  const filterFuels = () => {
+    let filtered = [...fuels];
+    if (selectedFuelType) {
+      filtered = filtered.filter(fuel => fuel.fuel_type === selectedFuelType);
     }
-  }, [fuels, search]);
+    if (search && search.length > 1) {
+      filtered = filtered.filter(fuel => fuel.fuel_type.toLowerCase().includes(search.toLowerCase()));
+    }
+    setFilteredFuels(filtered);
+  };
 
   const handleDeleteFuel = async (fuelToDelete) => {
     try {
@@ -83,7 +88,7 @@ const Index = ({ search }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setFuels((prevFuels) => prevFuels.filter((fuel) => fuel.id !== fuelToDelete.id));
+      setFuels(prevFuels => prevFuels.filter(fuel_type => fuel_type.id !== fuelToDelete.id));
     } catch (error) {
       console.error('Error deleting fuel:', error);
     }
@@ -97,17 +102,28 @@ const Index = ({ search }) => {
         <h2 className="pb-2 mb-2 text-xl">
           <b>Fuels</b>
         </h2>
-        <Link class="btn btn-outline-success" to="/fuel/create"> Create
+        <div className="dropdown">
+          <Button variant="outline-primary" id="dropdown-basic" className="dropdown-toggle" onClick={() => setSelectedFuelType(null)}>
+            Filter by Fuel Type
+          </Button>
+
+          <ul className="dropdown-menu">
+            {fuelType.map((type, index) => (
+              <li key={index}><button className="dropdown-item " onClick={() => setSelectedFuelType(type)}>{type}</button></li>
+            ))}
+          </ul>
+        </div>
+        <Link className="btn btn-outline-success" to="/fuel/create"> Create
         </Link>
       </div>
       <div className="row mt-5">
-        {filteredFuels?.length > 0 ? (
+        {filteredFuels.length > 0 ? (
           filteredFuels.map((fuel, i) => (
             <div key={i} className="col-md-4 mb-3">
-              <Link to={`/fuel/${fuel.id}`} class="text-dark text-decoration-none">
-              <FuelCard fuel_type={fuel.fuel_type} price={fuel.price} rating={fuel.rating}/>
+              <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
+                <FuelCard fuel_type={fuel.fuel_type} price={fuel.price} rating={fuel.rating}/>
               </Link> 
-              <FuelDelete fuel={fuel} deleteFuel={handleDeleteFuel} />
+              <FuelDelete  fuel={fuel} deleteFuel={handleDeleteFuel} />
             </div>
           ))
         ) : (
@@ -117,5 +133,7 @@ const Index = ({ search }) => {
     </div>
   );
 };
+
+const fuelType = ["Petrol", "Diesel", "Electric"];
 
 export default Index;

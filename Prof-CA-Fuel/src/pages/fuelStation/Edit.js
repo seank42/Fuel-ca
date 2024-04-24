@@ -85,51 +85,51 @@ const Edit = () => {
 
   return (
     <>
-      <h2 className="mb-3 ml-3 text-lg">
+      <h2 class="mb-3 ml-3 text-lg">
         <b>Edit Fuel Station</b>
       </h2>
       <Form
-        className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
+        class="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
         onSubmit={submitForm}
         method="POST"
       >
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.title}
           name="title"
           placeholder="Title"
         />
-        <span className="text-danger">{errors?.title?.message}</span>
+        <span class="text-danger">{errors?.title?.message}</span>
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.description}
           name="description"
           placeholder="Description"
         />
-        <span className="text-danger">{errors?.description?.message}</span>
+        <span class="text-danger">{errors?.description?.message}</span>
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.latitude}
           name="latitude"
           placeholder="Latitude"
         />
-        <span className="text-danger">{errors?.latitude?.message}</span>
+        <span class="text-danger">{errors?.latitude?.message}</span>
         <Input
-          className="form-control"
+          class="form-control"
           type="text"
           onChange={handleForm}
           value={form.longitude}
           name="longitude"
           placeholder="Longitude"
         />
-        <span className="text-danger">{errors?.longitude?.message}</span>
-        <button className="btn btn-primary" type="submit">
+        <span class="text-danger">{errors?.longitude?.message}</span>
+        <button class="btn btn-primary" type="submit">
           Submit
         </button>
       </Form>

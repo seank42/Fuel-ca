@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar, Nav, Button, Form, FormControl, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) => {
+const TheNavbar = ({ props, search, onHandleChange, authenticated, onAuthenticated }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,10 +28,10 @@ const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) =
     <Navbar bg="dark" variant="dark" className="mb-2">
       <Navbar.Brand as={Link} to="/home" className="me-5 fw-bold">Home</Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">View E-Charging Stations</Nav.Link>
+        <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">View Fuel Station Map</Nav.Link>
         <Nav.Link as={Link} to="/fuelstation" className="text-light me-3">Fuel Stations</Nav.Link>
-        <Nav.Link as={Link} to="/all-fuel" className="text-light me-3">All Fuel</Nav.Link>
-      <Nav.Link as={Link} to="/favourite" className="text-light me-3">Favourites</Nav.Link>
+        <Nav.Link as={Link} to="/all-fuel" className="text-light me-3">Fuel</Nav.Link>
+      <Nav.Link as={Link} to="/favourites/index" className="text-light me-3">Favourites</Nav.Link>
 
       </Nav>
       {shouldShowSearchBarFuelStation && (
