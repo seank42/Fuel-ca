@@ -45,7 +45,8 @@ const Index = ({ search }) => {
   const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredFuels, setFilteredFuels] = useState([]);
-  const [selectedFuelType, setSelectedFuelType] = useState(null); 
+  const [selectedFuelType, setSelectedFuelType] = useState(null);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null); 
 
   useEffect(() => {
     const fetchFuels = async () => {
@@ -69,15 +70,26 @@ const Index = ({ search }) => {
 
   useEffect(() => {
     filterFuels();
-  }, [fuels, selectedFuelType, search]);
-
+  }, [fuels, selectedFuelType, selectedPriceRange, search]); 
   const filterFuels = () => {
     let filtered = [...fuels];
-    if (selectedFuelType !== null) { 
-      filtered = filtered.filter(fuel => fuel.fuel_type === selectedFuelType);
+    if (selectedFuelType !== null) {
+
+      if(selectedFuelType === "All"){
+        filtered = [...fuels];
+      }
+      else {
+        filtered = filtered.filter(fuel => fuel.fuel_type === selectedFuelType);
+      }
+
+    }
+    if (selectedPriceRange !== null) {
+      if(selectedPriceRange !== null){
+        filtered = filtered.filter(fuel => fuel.price >= selectedPriceRange[0] && fuel.price <= selectedPriceRange[1]);
+      }
     }
     if (search && search.length > 1) {
-      filtered = filtered.filter(fuel => fuel.fuel_type.toLowerCase().includes(search.toLowerCase()));
+      filtered = filtered.filter(fuel => fuel.fuelStation.title.toLowerCase().includes(search.toLowerCase()));
     }
     setFilteredFuels(filtered);
   };
@@ -97,11 +109,11 @@ const Index = ({ search }) => {
   };
 
   const handleFuelTypeChange = (value) => {
-    if (selectedFuelType === value) {
-      setSelectedFuelType(null);
-    } else {
-      setSelectedFuelType(value);
-    }
+    setSelectedFuelType(value);
+  };
+
+  const handlePriceRangeChange = (value) => {
+    setSelectedPriceRange(value);
   };
 
   if (loading) return 'Loading...';
@@ -114,16 +126,25 @@ const Index = ({ search }) => {
         </h2>
         <DropdownButton
           variant="outline-primary"
-          id="dropdown-basic"
-          title="Filter by Fuel Type" 
+          id="dropdown-fuel-type"
+          title="Filter by Fuel Type"
           className="dropdown"
         >
           {fuelType.map((type, index) => (
             <Dropdown.Item key={index} onClick={() => handleFuelTypeChange(type)}>{type}</Dropdown.Item>
           ))}
         </DropdownButton>
-        <Link className="btn btn-outline-success" to="/fuel/create"> Create
-        </Link>
+        <DropdownButton
+          variant="outline-primary"
+          id="dropdown-price-range"
+          title="Filter by Price Range"
+          className="dropdown"
+        >
+          {priceRanges.map((range, index) => (
+            <Dropdown.Item key={index} onClick={() => handlePriceRangeChange(range.value)}>{range.label}</Dropdown.Item>
+          ))}
+        </DropdownButton>
+        <Link className="btn btn-outline-success" to="/fuel/create"> Create </Link>
       </div>
       <div className="row mt-5">
         {filteredFuels.length > 0 ? (
@@ -143,6 +164,12 @@ const Index = ({ search }) => {
   );
 };
 
-const fuelType = ["Petrol", "Diesel", "Electric"];
+const fuelType = ["Petrol", "Diesel", "Electric", "All"];
+
+const priceRanges = [
+  { label: '$0 - $50', value: [0, 50] },
+  { label: '$50 - $100', value: [50, 100] },
+  { label: 'All', value: null }, ,
+];
 
 export default Index;
