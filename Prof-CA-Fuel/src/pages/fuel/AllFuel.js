@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton'; // Import DropdownButton
-import Dropdown from 'react-bootstrap/Dropdown'; // Import Dropdown
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
 import FuelCard from '../../components/FuelCard';
@@ -45,7 +45,7 @@ const Index = ({ search }) => {
   const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredFuels, setFilteredFuels] = useState([]);
-  const [selectedFuelType, setSelectedFuelType] = useState(null); // Initialize as null
+  const [selectedFuelType, setSelectedFuelType] = useState(null); 
 
   useEffect(() => {
     const fetchFuels = async () => {
@@ -73,7 +73,7 @@ const Index = ({ search }) => {
 
   const filterFuels = () => {
     let filtered = [...fuels];
-    if (selectedFuelType !== null) { // Check if selectedFuelType is not null
+    if (selectedFuelType !== null) { 
       filtered = filtered.filter(fuel => fuel.fuel_type === selectedFuelType);
     }
     if (search && search.length > 1) {
@@ -98,7 +98,7 @@ const Index = ({ search }) => {
 
   const handleFuelTypeChange = (value) => {
     if (selectedFuelType === value) {
-      setSelectedFuelType(null); // Reset to null if already selected
+      setSelectedFuelType(null);
     } else {
       setSelectedFuelType(value);
     }
@@ -115,7 +115,7 @@ const Index = ({ search }) => {
         <DropdownButton
           variant="outline-primary"
           id="dropdown-basic"
-          title="Filter by Fuel Type" // Set the button text using title prop
+          title="Filter by Fuel Type" 
           className="dropdown"
         >
           {fuelType.map((type, index) => (
