@@ -19,7 +19,7 @@ const Show = () => {
       })
       .then((response) => {
         setFuelStation(response.data.data);
-        setFuels(response.data.data.fuels); // Assuming fuels data is nested under 'fuels' key
+        setFuels(response.data.data.fuels); 
         setLoading(false);
       })
       .catch((err) => {

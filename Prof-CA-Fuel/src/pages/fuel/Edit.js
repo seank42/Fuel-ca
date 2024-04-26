@@ -32,7 +32,6 @@ const Edit = () => {
         console.error("Error fetching data:", error);
       });
 
-    // Fetch fuels data
     axios
       .get("http://localhost/api/fuels", {
         headers: {
