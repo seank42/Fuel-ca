@@ -8,7 +8,7 @@ const LoginForm = ({ authenticated, onAuthenticated }) => {
     color: "red",
   };
 
-const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -85,6 +85,6 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
     </>
   );
 };
-};
+
 
 export default LoginForm;
