@@ -32,10 +32,7 @@ const Create = () => {
   }, []);
 
   const handleForm = (e) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const isRequired = (fields) => {
