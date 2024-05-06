@@ -1,15 +1,21 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 
-const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
+const LoginForm = ({ authenticated, onAuthenticated }) => {
+  const errStyle = {
+    color: "red",
+  };
+
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const [errMessage, setErrMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleClick = () => {
     axios
@@ -20,6 +26,7 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
       .then((response) => {
         console.log(response.data);
         onAuthenticated(true, response.data.token);
+        navigate("/home");
       })
       .catch((err) => {
         console.error(err);
@@ -36,46 +43,48 @@ const LoginForm = ({ onAuthenticated, navigateToCourses }) => {
   };
 
   return (
-    <Container className="lg-center d-flex justify-content-center align-items-center">
-      <div className="text-center cover-full bg-primary pb-4 pt-4">
-        <h2 className="text-4xl text-white">User Login</h2>
-      </div>
-      <div className="flex flex-col items-center space-y-8 mt-12">
-        <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Control
-              type="text"
-              placeholder="Enter email"
-              name="email"
-              value={form.email}
-              onChange={handleForm}
-            />
-          </Form.Group>
+    <>
+      <div class="container mt-5">
+        <div class="text-center">
+          <h2>User Login</h2>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-4">
+          <Form>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                value={form.email}
+                onChange={handleForm}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={form.password}
-              onChange={handleForm}
-            />
-          </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={form.password}
+                onChange={handleForm}
+              />
+            </Form.Group>
 
-          <Button variant="primary" onClick={handleClick}>
-            Submit
-          </Button>
-          {errMessage && <Alert variant="danger">{errMessage}</Alert>}
-        </Form>
-
-        <div>
-          <Link className="text-blue-500" to="/register">
-            Don't have an account? Register here.
-          </Link>
+            <Button variant="primary" onClick={handleClick}>
+              Submit
+            </Button>
+          </Form>
+          <p style={errStyle}>{errMessage}</p>
+          <div>
+            <Link to="/register">Don't have an account? Register here.</Link>
+          </div>
         </div>
       </div>
-    </Container>
+    </>
   );
 };
+
 
 export default LoginForm;

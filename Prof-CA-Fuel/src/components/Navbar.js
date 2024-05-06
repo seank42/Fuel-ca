@@ -1,51 +1,66 @@
 import React from 'react';
+import { Navbar, Nav, Button, Form, FormControl, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Navbar, Nav, DropdownButton, Dropdown, Button, Container } from 'react-bootstrap';
 
-const TheNavbar = ({ search, onHandleChange, authenticated, onAuthenticated }) => {
+const TheNavbar = ({ props, search, onHandleChange, authenticated, onAuthenticated }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const signup = () => {
-    onAuthenticated(true);
-    navigate('/login');
+  const logout = () => {
+    onAuthenticated(false);
+    navigate('/');
   };
 
   const handleChange = (e) => {
-    navigate("/all-diesel");
-    onHandleChange(e);
+    navigate('/fuelstation');
+    onHandleChange(e.target.value); 
   };
 
+  const handleChangeD = (e) => {
+    navigate('/allfuel');
+    onHandleChange(e.target.value); 
+  };
+
+  const shouldShowSearchBarFuelStation = location.pathname === '/fuelstation';
+  const shouldShowSearchBarAllDiesel = location.pathname === '/all-fuel';
+
   return (
-    <Navbar bg="dark" className=" mb-2">
-      <Container>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="">
-            <Nav.Link as={Link} to="/home" className="text-primary me-3 fw-bold"> Home </Nav.Link>
-            <Nav.Link as={Link} to="/create-station" className="text-light me-3">
-              Create Station
-            </Nav.Link>
-            {/* <Nav.Link as={Link} to="/edit-station" className="text-light me-3">
-              Edit Station
-            </Nav.Link> */}
-            <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">
-              View E-charging stations
-            </Nav.Link>
-            <DropdownButton
-              title="Fuel Prices"
-              variant="primary"
-              className="ms-3"
-            >
-              <Dropdown.Item as={Link} to="/all-petrol" className="text-dark me-3">All Petrol</Dropdown.Item>
-              <Dropdown.Item as={Link} to="/all-diesel" className="text-dark me-3">All Diesel</Dropdown.Item>
-            </DropdownButton>
-          </Nav>
-          <div className="ms-auto">
-            <Button variant="outline-light" onClick={signup} className='text-light'>
-              Sign up
-            </Button>
-          </div>
-        </Navbar.Collapse>
-      </Container>
+    <Navbar bg="dark" variant="dark" className="mb-2">
+      <Navbar.Brand as={Link} to="/home" className="me-5 fw-bold">Home</Navbar.Brand>
+      <Nav className="me-auto">
+        <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">View Fuel Station Map</Nav.Link>
+        <Nav.Link as={Link} to="/fuelstation" className="text-light me-3">Fuel Stations</Nav.Link>
+        <Nav.Link as={Link} to="/all-fuel" className="text-light me-3">Fuel</Nav.Link>
+      <Nav.Link as={Link} to="/favourites/index" className="text-light me-3">Favourites</Nav.Link>
+
+      </Nav>
+      {shouldShowSearchBarFuelStation && (
+        <Form className="d-flex">
+          <FormControl
+            type="search"
+            placeholder="Enter search..."
+            className="mr-3"
+            aria-label="Search"
+            onChange={onHandleChange}
+            value={search}
+          />
+        </Form>
+      )}
+      {shouldShowSearchBarAllDiesel && (
+        <Form className="d-flex">
+          <FormControl
+            type="search"
+            placeholder="Enter search..."
+            className="mr-3"
+            aria-label="Search"
+            onChange={onHandleChange}
+            value={search}
+          />
+        </Form>
+      )}
+      <div className="ms-auto">
+        <Button variant="outline-light" onClick={logout}>Logout</Button>
+      </div>
     </Navbar>
   );
 };

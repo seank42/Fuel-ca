@@ -5,12 +5,12 @@ const Newscard = () => {
   const cardIndices = Array.from({ length: 4 }, (_, index) => index);
 
   return (
-    <div className="row row-cols-1 row-cols-md-4">
+    <div class="row row-cols-1 row-cols-md-4">
     {cardIndices.map((index) => (
-      <div key={index} className="col mb-4">
+      <div key={index} class="col mb-4">
        <Card border="primary" style={{ borderWidth: '3px' }} >
-      <Card.Header className='text-dark bg-light'>Heading</Card.Header>
-      <Card.Body className='text-dark bg-light'>
+      <Card.Header class='text-dark bg-light'>Heading</Card.Header>
+      <Card.Body class='text-dark bg-light'>
         <Card.Title>Topic</Card.Title>
         <Card.Text>
         Cost of living: Thousands of drivers could claim €1,831 cash boost with little-known Fuel Grant

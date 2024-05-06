@@ -1,42 +1,17 @@
-import Input from './Input';
+import React from 'react';
 
-const Form = ({ onSubmit, errors }) => {
-    return (
-        <form onSubmit={onSubmit} >
-            <div className="mb-5">
-                <Input
-                    name="Station Name:"
-                    label="Station Name"
-                    type="text"
-                />
-                {errors.stationName && <span style={{ color: 'red' }}>{errors.stationName}</span>}
-            </div>
-            <div className="mb-5">
-                <Input
-                    name="Petrol Price:"
-                    label="Petrol Price"
-                    type="number"
-                />
-                {errors.petrolPrice && <span style={{ color: 'red' }}>{errors.petrolPrice}</span>}
-            </div>
-            <div className="mb-5">
-                <Input
-                    name="Diesel Price:"
-                    label="Diesel Price"
-                    type="number"
-                />
-                {errors.dieselPrice && <span style={{ color: 'red' }}>{errors.dieselPrice}</span>}
-            </div>
-            <div className="mb-5">
-                <Input
-                    name="Station Rating:"
-                    label="Station Rating"
-                    type="number"
-                />
-                {errors.stationRating && <span style={{ color: 'red' }}>{errors.stationRating}</span>}
-            </div>
-        </form>
-    );
+// This is defining the Form component
+const Form = ({ onSubmit, children }) => {
+  // This is returning a form with attributes and styling
+  return (
+    <form
+      class="d-flex flex-column align-items-center gap-4 max-w-2xl mx-auto pb-4 pt-4 border border-2 border-secondary rounded"
+      onSubmit={onSubmit}
+      method="POST"
+    >
+      {children} {/* This is rendering the child components within the form */}
+    </form>
+  );
 };
 
 export default Form;

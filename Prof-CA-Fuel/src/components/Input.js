@@ -1,17 +1,21 @@
+import React from 'react';
+
+// This is defining the Input component
 const Input = ({ onChange, type, name, value }) => {
-    return (
-      <label className="flex flex-col capitalize" htmlFor={name}>
+  return (
+    <div class="mb-3">
+      <label htmlFor={name} class="form-label">
         {name}
-        <input
-          className="border border-black rounded px-3 py-2 mt-2"
-          onChange={onChange}
-          type={type}
-          name={name}
-          value={value}
-        />
       </label>
-    );
-  };
-  
-  export default Input;
-  
+      <input
+        class="form-control"
+        onChange={onChange}
+        type={type}
+        name={name}
+        value={value}
+      />
+    </div>
+  );
+};
+
+export default Input;

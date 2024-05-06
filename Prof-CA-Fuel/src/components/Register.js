@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 
 const RegisterForm = ({ authenticated, onAuthenticated }) => {
   const errStyle = {
@@ -15,6 +15,7 @@ const RegisterForm = ({ authenticated, onAuthenticated }) => {
   });
 
   const [errMessage, setErrMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleClick = () => {
     axios
@@ -26,7 +27,7 @@ const RegisterForm = ({ authenticated, onAuthenticated }) => {
       .then((response) => {
         console.log(response.data);
         onAuthenticated(true, response.data.token);
-        // Redirect to the home page or wherever you want
+        navigate("/home");
       })
       .catch((err) => {
         console.error(err);
@@ -43,55 +44,57 @@ const RegisterForm = ({ authenticated, onAuthenticated }) => {
   };
 
   return (
-    <Container className="lg-center d-flex justify-content-center align-items-center">
-      <div className="text-center cover-full bg-primary pb-4 pt-4">
-        <h2 className="text-4xl text-white">User Register</h2>
-      </div>
-      <div className="flex flex-col items-center space-y-8 mt-12">
-        <Form>
-          <Form.Group controlId="formBasicName">
-            <Form.Control
-              type="text"
-              placeholder="Enter name"
-              name="name"
-              value={form.name}
-              onChange={handleForm}
-            />
-          </Form.Group>
+    <>
+      <div class="container mt-5">
+        <div class="text-center">
+          <h2>User Register</h2>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-4">
+          <Form>
+            <Form.Group controlId="name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                name="name"
+                value={form.name}
+                onChange={handleForm}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formBasicEmail">
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              value={form.email}
-              onChange={handleForm}
-            />
-          </Form.Group>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                value={form.email}
+                onChange={handleForm}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={form.password}
-              onChange={handleForm}
-            />
-          </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={form.password}
+                onChange={handleForm}
+              />
+            </Form.Group>
 
-          <Button variant="primary" onClick={handleClick}>
-            Submit
-          </Button>
-          {errMessage && <Alert variant="danger">{errMessage}</Alert>}
-        </Form>
-
-        <div>
-          <Link className="underline text-blue-500" to="/login">
-            Have an account? Login here.
-          </Link>
+            <Button variant="primary" onClick={handleClick}>
+              Submit
+            </Button>
+          </Form>
+          <p style={errStyle}>{errMessage}</p>
+          <div>
+            <Link to="/">Have an account? Login here.</Link>
+          </div>
         </div>
       </div>
-    </Container>
+    </>
   );
 };
 

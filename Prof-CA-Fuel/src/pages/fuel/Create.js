@@ -1,17 +1,35 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Input";
+import Form from "../../components/Form";
 
 const Create = () => {
   const navigate = useNavigate();
-
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
+    fuel_station_id: "", 
     fuel_type: "",
     price: "",
     rating: "",
   });
+  const [fuelStations, setFuelStations] = useState([]); 
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    axios
+      .get("http://localhost/api/fuelStations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFuelStations(response.data.data); 
+      })
+      .catch((error) => {
+        console.error("Error fetching fuel stations:", error);
+      });
+  }, []);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,81 +57,90 @@ const Create = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    if (isRequired(["fuel_type", "price", "rating"])) {
-      const token = localStorage.getItem("token");
-
+    if (isRequired(["fuel_station_id", "fuel_type", "price", "rating"])) {
+      let token = localStorage.getItem("token");
       axios
-        .post(`http://localhost/api/fuels`, form, {
+        .post("http://localhost/api/fuels", form, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
           console.log(response);
-          navigate("/home");
+          navigate("/all-fuel");
         })
         .catch((err) => {
           console.error(err);
-          setErrors(err.response.data.err);
+          setErrors(err.response?.data);
         });
     }
   };
 
   return (
-    <Container>
-      <Row className="justify-content-center">
-        <Col md={8}>
-          <h2 className="mb-3 ml-3 text-lg">
-            <b>Create Fuel</b>
-          </h2>
-          <Form
-            className="flex flex-col items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-zinc-300"
-            onSubmit={submitForm}
-            method="POST"
-          >
-            <Form.Group controlId="fuel_type">
-              <Form.Label>Fuel Type</Form.Label>
-              <Form.Control
-                type="text"
-                onChange={handleForm}
-                value={form.fuel_type}
-                name="fuel_type"
-                className="border border-black rounded pr-5 pl-5"
-              />
-              <Form.Text className="text-red-600">{errors?.fuel_type?.message}</Form.Text>
-            </Form.Group>
-
-            <Form.Group controlId="price">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                onChange={handleForm}
-                value={form.price}
-                name="price"
-                className="border border-black rounded pr-5 pl-5"
-              />
-              <Form.Text className="text-red-600">{errors?.price?.message}</Form.Text>
-            </Form.Group>
-
-            <Form.Group controlId="rating">
-              <Form.Label>Rating</Form.Label>
-              <Form.Control
-                type="number"
-                min={1}
-                max={5}
-                onChange={handleForm}
-                value={form.rating}
-                name="rating"
-                className="border border-black rounded pr-5 pl-5"
-              />
-              <Form.Text className="text-red-600">{errors?.rating?.message}</Form.Text>
-            </Form.Group>
-
-            <Button type="submit" className="btn btn-active">Submit</Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <h2 className="mb-3 ml-3 text-lg">
+        <b>Create Fuel </b>
+      </h2>
+      <Form
+        className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
+        onSubmit={submitForm}
+        method="POST"
+      >
+        <div>
+          <div className="w-72 item-center border border-gray-300">
+            <select
+              name="fuel_station_id"
+              onChange={handleForm}
+              className="form-select"
+              value={form.fuel_station_id}
+            >
+              <option value="">-- Please choose a fuel station --</option>
+              {fuelStations.map((fuelstation) => (
+                <option key={fuelstation.id} value={fuelstation.id}>
+                  {fuelstation.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <span className="text-danger">{errors?.fuel_station_id?.message}</span>
+        </div>
+        <div>
+          <div className="w-72 item-center border border-gray-300">
+            <select
+              name="fuel_type"
+              onChange={handleForm}
+              className="form-select"
+              value={form.fuel_type}
+            >
+              <option value="">-- Please choose a fuel type --</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+          <span className="text-danger">{errors?.fuel_type?.message}</span>
+        </div>
+        <Input
+          className="form-control"
+          type="text"
+          onChange={handleForm}
+          value={form.price}
+          name="price"
+          placeholder="price"
+        />
+        <span className="text-danger">{errors?.price?.message}</span>
+        <Input
+          className="form-control"
+          type="text"
+          onChange={handleForm}
+          value={form.rating}
+          name="rating"
+          placeholder="rating"
+        />
+        <span className="text-danger">{errors?.rating?.message}</span>
+        <button className="btn btn-primary" type="submit">Submit</button>
+      </Form>
+    </>
   );
 };
 

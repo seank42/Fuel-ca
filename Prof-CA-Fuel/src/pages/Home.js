@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import NewsCard from '../components/NewsCard';
 import Table from 'react-bootstrap/Table';
-import { GoogleMap,  useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const mapContainerStyle = {
   width: '100%',
@@ -11,45 +12,74 @@ const mapContainerStyle = {
 const center = { lat: 53.1935014, lng: -6.1913295 };
 
 const Home = () => {
+  
+  const [fuelStations, setFuelStations] = useState([]);
+  const [fuels, setFuels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: "AIzaSyAuHnwnyAwPe4AjNkWs0KJs49umDZuyhjo"
   });
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`http://localhost/api/fuels`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFuels(response.data.data);
+        setLoading(false);
+
+      })
+      .catch((err) => {
+        console.error("Error fetching fuels:", err);
+        setLoading(false);
+      });
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    // Clean up function if needed
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`http://localhost/api/fuelStations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFuelStations(response.data.data);
+        setLoading(false);
+
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   }, []);
+
 
   const tableStructure = () => {
     return (
-      <Table responsive className="custom-table bg-light">
+      <Table responsive class="custom-table bg-light">
         <thead>
           <tr>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <th key={index} style={{ borderTop: '1px solid black', borderLeft: '1px solid black' }} className="vertical-line">Station:</th>
+            {fuels.map((fuel, index) => (
+              <th key={index} style={{ borderTop: '1px solid black', borderLeft: '1px solid black' }} class="vertical-line">Fuel Type: {fuel.fuel_type}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           <tr>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <td key={index} style={{ borderLeft: '1px solid black' }}>Price Pl:</td>
+            {fuels.map((fuel, index) => (
+              <td key={index} style={{ borderLeft: '1px solid black' }}>Price : {fuel.price}</td>
             ))}
           </tr>
           <tr>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <td key={index} style={{ borderLeft: '1px solid black' }}>Rating: </td>
-            ))}
-          </tr>
-          <tr>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <td key={index} style={{ borderLeft: '1px solid black', borderBottom: '1px solid black' }}>Location:</td>
+            {fuels.map((fuel, index) => (
+              <td key={index} style={{ borderLeft: '1px solid black' }}>Rating: {fuel.rating}</td>
             ))}
           </tr>
         </tbody>
@@ -58,31 +88,27 @@ const Home = () => {
   };
 
   return (
-    <div className='bg-light'>
-      <h1 className="text-center text-dark">Welcome to Fuel Finder</h1>
-      <h2 className="text-start text-dark">Petrol Prices</h2>
+    <div class='bg-light'>
+      <h1 class="text-center text-dark">Welcome to Fuel Finder</h1>
+      <h2 class="text-start text-dark">Fuel Prices</h2>
       {/* Render the tableStructure */}
-      {tableStructure()}
+      {loading ? <p>Loading...</p> : tableStructure()}
           
-      <h2 className="text-start text-dark">Diesel Prices</h2>
-      {/* Render the tableStructure again for diesel prices */}
-      {tableStructure()}
 
       {isLoaded && (
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
           zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
         >
-          <Marker position={{ lat: 18.52045, lng: 73.856745 }} />
-          <Marker position={{ lat: 18.52043, lng: 73.856743 }} />
+          {fuelStations.map((fuelstation, index) => (
+            <Marker key={index} position={{ lat: fuelstation.latitude, lng: fuelstation.longitude }} />
+          ))}
         </GoogleMap>
       )}
 
       {/* Render the NewsCardRow */}
-      <h2 className="text-start text-dark">Latest News</h2>
+      <h2 class="text-start text-dark">Latest News</h2>
       <NewsCard />
     </div>
   );
