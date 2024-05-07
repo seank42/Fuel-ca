@@ -105,51 +105,55 @@ const Edit = () => {
 
   return (
     <>
-      <h2 class="mb-3 ml-3 text-lg">
+    <div className="container mt-5">
+      <div className="d-flex justify-content-between align-items-center">
+      <h2 className="pb-4 mb-2 text-xl">
         <b>Edit Fuel </b>
       </h2>
+      </div>
       <Form
-        class="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
+        className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
         onSubmit={submitForm}
         method="POST"
       >
         <div>
-          <div class="w-72 item-center border border-gray-300">
+          <div className="w-72 item-center border border-gray-300">
             <select
               name="fuel_type"
               onChange={handleForm}
-              class="form-select"
+              className="form-select"
               value={form.fuel_type}
             >
               <option value="">-- Please choose a fuel type --</option>
               {fuelsDrop}
             </select>
           </div>
-          <span class="text-danger">{errors?.fuel_type?.message}</span>
+          <span className="text-danger">{errors?.fuel_type?.message}</span>
         </div>
 
         <Input
-          class="form-control"
+          className="form-control"
           type="text"
           onChange={handleForm}
           value={form.price}
           name="price"
           placeholder="price"
         />
-        <span class="text-danger">{errors?.price?.message}</span>
+        <span className="text-danger">{errors?.price?.message}</span>
         <Input
-          class="form-control"
+          className="form-control"
           type="text"
           onChange={handleForm}
           value={form.rating}
           name="rating"
           placeholder="rating"
         />
-        <span class="text-danger">{errors?.rating?.message}</span>
-        <button class="btn btn-primary" type="submit">
+        <span className="text-danger">{errors?.rating?.message}</span>
+        <button className="btn btn-primary" type="submit">
           Submit
         </button>
       </Form>
+      </div>
     </>
   );
 };

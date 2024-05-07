@@ -45,9 +45,9 @@ const DeleteButton = ({ id, onClick }) => {
   };
   // renders a button based on the loading state
   return (
-    <button class="btn btn-outline btn-error" onClick={onDelete}>
-      {isLoading ? "Deleing..." : "Delete"}
-    </button>
+  <button class="btn btn-outline btn-error btn-group-sm btn-white" onClick={onDelete}>
+  {isLoading ? "Deleting..." : "Delete"}
+</button>
   );
 };
 

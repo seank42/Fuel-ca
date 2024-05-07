@@ -20,7 +20,7 @@ function FuelDelete({ fuel, deleteFuel }) {
 
   return (
     <>
-      <Button variant="outline-danger" onClick={handleShow}>
+      <Button variant="outline-danger" onClick={handleShow} className="btn-sm">
         Delete
       </Button>
       <Modal show={show} onHide={handleClose}>
@@ -153,7 +153,10 @@ const Index = ({ search }) => {
               <Link to={`/fuel/${fuel.id}`} className="text-dark text-decoration-none">
                 <FuelCard fuel={fuel} />
               </Link> 
+              <div className="pt-3 pr-3">
               <FuelDelete fuel={fuel} deleteFuel={handleDeleteFuel} />
+              </div>
+              
             </div>
           ))
         ) : (

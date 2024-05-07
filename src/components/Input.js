@@ -3,12 +3,12 @@ import React from 'react';
 // This is defining the Input component
 const Input = ({ onChange, type, name, value }) => {
   return (
-    <div class="mb-3">
-      <label htmlFor={name} class="form-label">
+    <div className="mb-3">
+      <label htmlFor={name} className="form-label">
         {name}
       </label>
       <input
-        class="form-control"
+        className="form-control"
         onChange={onChange}
         type={type}
         name={name}

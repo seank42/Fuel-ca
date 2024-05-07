@@ -31,15 +31,18 @@ const Show = () => {
 
   return (
     <>
-      <h2 className="text-xl mb-5 ml-5 mt-5 pt-5">
+    <div className="container mt-5">
+      <div className="d-flex justify-content-between align-items-center">
+      <h2 className="pb-4 mb-2 text-xl">
         <b>{fuelStation.title}</b>
         <div className="mt-4 ml-3">
         <Link to={`/fuelStation/${id}/edit`}>
           <button className="btn btn-outline-primary mr-3">Edit</button>
         </Link>
       </div>
+      
       </h2>
-  
+      </div>
       <div className="container">
         <div className="row">
           <div className="col-lg-6 mx-auto">
@@ -91,6 +94,7 @@ const Show = () => {
           ))}
         </div>
       )}
+      </div>
     </>
   );
 };

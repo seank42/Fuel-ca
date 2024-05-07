@@ -20,7 +20,7 @@ function FuelStationDelete({fuelStation, deleteFuelStation}) {
 
   return (
     <>
-    <Button variant="outline-danger" onClick={handleShow}>
+    <Button variant="outline-danger" onClick={handleShow} className="btn-sm ">
       Delete
     </Button>
     <Modal show={show} onHide={handleClose}>
@@ -79,7 +79,8 @@ const Index = ({ search, authenticated, resource }) => {
     deleteFuelStationWithFuels(fuelStation);
   };
 
-  const handleFavouriteFuelStation = async (fuelStationId) => {
+  const handleFavouriteFuelStation = async (fuelStationId, event) => {
+    event.preventDefault();
     const token = localStorage.getItem('token');
     try {
      const response = await axios.post(`http://localhost/api/favorites/${fuelStationId}`, {}, {
@@ -94,7 +95,8 @@ const Index = ({ search, authenticated, resource }) => {
     }
   };
 
-  const handleUnfavouriteFuelStation = async (fuelStationId) => {
+  const handleUnfavouriteFuelStation = async (fuelStationId, event) => {
+    event.preventDefault();
     const token = localStorage.getItem('token');
     try {
       await axios.delete(`http://localhost/api/favorites/${fuelStationId}`, {
@@ -118,57 +120,66 @@ const Index = ({ search, authenticated, resource }) => {
 
   return (
     <div className="container mt-5"> 
-      <div className="d-flex justify-content-between align-items-center">
-        <h2 className="pb-2 mb-2 text-xl"> 
-          <b>Fuel Stations</b>
-        </h2>
-        <Link className="btn btn-outline-success" to="/fuelstation/create">
-          Create
-        </Link>
-      </div>
-      <div className="row mt-5">
-        {filteredFuelStations?.length > 0 ? (
-          filteredFuelStations.map((fuelStation, i) => (
-            <div key={i} className="col-md-4 mb-3"> 
-              <Link to={`/fuelStation/${fuelStation.id}`} className="text-dark text-decoration-none"> 
-                <FuelStationCard
-                  title={fuelStation.title}
-                  description={fuelStation.description}
-                  longitude={fuelStation.longitude}
-                  latitude={fuelStation.latitude}
-                />
-              </Link>
-              <div>
+        <div className="d-flex justify-content-between align-items-center">
+          <h2 className="pb-2 mb-2 text-xl"> 
+            <b>Fuel Stations</b>
+          </h2>
+          <Link className="btn btn-outline-success" to="/fuelstation/create">
+            Create
+          </Link>
+        </div>
+        <div className="row mt-5 gap-8">
+          {filteredFuelStations?.length > 0 ? (
+            filteredFuelStations.map((fuelStation, i) => (
+              <div key={i} className="col-md-4 mb-3 gap-8 card"> 
+                <div className="position-relative p-5"> 
+                  <Link to={`/fuelStation/${fuelStation.id}`} className="text-dark text-decoration-none"> 
+                    <FuelStationCard
+                      title={fuelStation.title}
+                      description={fuelStation.description}
+                      longitude={fuelStation.longitude}
+                      latitude={fuelStation.latitude}
+                      
+                    />
+                  </Link>
+                    
+                </div>
+               
+                <div className="bg-zinc d-flex flex-row justify-content-md-between">
+                  <div className="d-flex flex-row gap-2">
                 {authenticated && (
                   <Button
-                    onClick={() => handleFavouriteFuelStation(fuelStation.id)}
+                    onClick={(event) => handleFavouriteFuelStation(fuelStation.id, event)}
                     variant="outline-info"
+                    className="btn-sm "
                   >
                     Favourite
                   </Button>
                 )}
                 {authenticated && (
                   <Button
-                    onClick={() => handleUnfavouriteFuelStation(fuelStation.id)}
+                    onClick={(event) => handleUnfavouriteFuelStation(fuelStation.id, event)}
                     variant="outline-warning"
+                    className="btn-sm ml-2"
                   >
                     Unfavourite
                   </Button>
                 )}
+                </div>
+                 <FuelStationDelete
+                      fuelStation={fuelStation}
+                      deleteFuelStation={handleDeleteFuelStation}
+                      
+                    />
+                    </div>
               </div>
-              <FuelStationDelete
-                fuelStation={fuelStation}
-                deleteFuelStation={handleDeleteFuelStation}
-              />
-            </div>
-          ))
-        ) : (
-          <p>No fuel stations found.</p>
-        )}
+            ))
+          ) : (
+            <p>No fuel stations found.</p>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );    
 };
-
 
 export default Index;
