@@ -26,7 +26,7 @@ const TheNavbar = ({ props, search, onHandleChange, authenticated, onAuthenticat
 
   return (
     <Navbar bg="dark" variant="dark" className="mb-2">
-      <Navbar.Brand as={Link} to="/home" className="me-5 fw-bold">Home</Navbar.Brand>
+      <Navbar.Brand as={Link} to="/home" className="ms-5 fw-bold  text-">Home</Navbar.Brand>
       <Nav className="me-auto">
         <Nav.Link as={Link} to="/View-EPorts" className="text-light me-3">View Fuel Station Map</Nav.Link>
         <Nav.Link as={Link} to="/fuelstation" className="text-light me-3">Fuel Stations</Nav.Link>
@@ -58,8 +58,8 @@ const TheNavbar = ({ props, search, onHandleChange, authenticated, onAuthenticat
           />
         </Form>
       )}
-      <div className="ms-auto">
-        <Button variant="outline-light" onClick={logout}>Logout</Button>
+      <div className="ms-auto mr-5">
+        <Button variant="outline-light" onClick={logout} className='me-4'>Logout</Button>
       </div>
     </Navbar>
   );

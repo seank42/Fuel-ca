@@ -81,9 +81,12 @@ const Create = () => {
   // the return renders the form for creating a fuel station
   return (
     <>
-      <h2 className="mb-3 ml-3 text-lg">
+    <div className="container mt-5">
+      <div className="d-flex justify-content-between align-items-center">
+      <h2 className="pb-4 mb-2 text-xl">
         <b>Create Fuel Station</b>
       </h2>
+      </div>
       {/* form component for fuel station creation */}
       <Form
         className="d-flex flex-column align-items-center space-y-4 max-w-2xl mx-auto pb-12 pt-4 border border-secondary"
@@ -130,6 +133,7 @@ const Create = () => {
         {/* the submit button for the form */}
         <button className="btn btn-primary" type="submit">Submit</button>
       </Form>
+      </div>
     </>
   );
 };
